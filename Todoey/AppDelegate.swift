@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +20,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         // code for getting app data in sandbox
-        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true))
+//        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true))
+        
+        // get file path by using FileManager
+//        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first)
+
+        // get the path where Realm file stored
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
+        do {
+            let realm = try Realm()
+        } catch {
+            print("Error from Realm: \(error)")
+        }
+        
+        
         return true
     }
     
