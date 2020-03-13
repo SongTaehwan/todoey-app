@@ -11,15 +11,18 @@ import CoreData
 
 class TableViewController: UITableViewController {
     var itemArray = [Todo]()
-    var categoryName: String?
+    var selectedCategory: Category? {
+        // call loadTodos as soon as selectedCategory assigned from prev screen
+        didSet {
+            loadTodos()
+        }
+    }
 
     // get DB instance
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        loadTodos()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,6 +66,8 @@ class TableViewController: UITableViewController {
             let newItem = Todo(context: self.context)
 //            newItem.title = textField.text!
             newItem.setValue(textField.text!, forKey: "title")
+            // 그대로 넣음
+            newItem.setValue(self.selectedCategory, forKey: "parentCategory")
 
             self.itemArray.append(newItem)
 
@@ -80,6 +85,7 @@ class TableViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    // MARK: - Data Manipulation Methods
     func saveTodo() -> Void {
         do {
             try context.save()
@@ -89,13 +95,20 @@ class TableViewController: UITableViewController {
         }
     }
     
-    func loadTodos(with request: NSFetchRequest<Todo> = Todo.fetchRequest()) -> Void {
+    func loadTodos(with request: NSFetchRequest<Todo> = Todo.fetchRequest(), predicate: NSPredicate? = nil) -> Void {
+        // Core Data - READ
+        // blow lines of code work the same
+//        let categoryPredicate = NSPredicate(format: "parentCategory == %@", selectedCategory!)
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+
         do {
-            // MARK: - CoreData Read
-            // below two lines of codes work the same
-//            let request: NSFetchRequest<Todo> = Todo.fetchRequest()
-//            let request = NSFetchRequest<Todo>(entityName: "Todo")
-            request.predicate = NSPredicate(format: "parentCategory == %@", self.categoryName!)
+            if let addditionalPredicate = predicate {
+                let compoundPredicates = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, addditionalPredicate])
+                request.predicate = compoundPredicates
+            } else {
+                request.predicate = categoryPredicate
+            }
+
             itemArray = try context.fetch(request)
             tableView.reloadData()
         } catch {
@@ -117,16 +130,8 @@ extension TableViewController: UISearchBarDelegate {
         // Add sort conditions which can be multiple condition
         let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
         request.sortDescriptors = [sortDescriptor]
-
-        // refactor -> loadTodos
-//        do {
-//            itemArray = try context.fetch(request)
-//            tableView.reloadData()
-//        } catch {
-//            print(error)
-//        }
         
-        loadTodos(with: request)
+        loadTodos(with: request, predicate: predicate)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

@@ -36,7 +36,16 @@ class CategoryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("clicked")
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
-        performSegue(withIdentifier: "CategoryToItem", sender: self)
+        performSegue(withIdentifier: "goToItems", sender: self)
+    }
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToItems" {
+            let destination = segue.destination as! TableViewController
+            let indexPath = self.tableView.indexPathForSelectedRow!
+            destination.selectedCategory = categoryArray[indexPath.row]
+        }
     }
     
     // MARK: - Add New Category
@@ -80,15 +89,6 @@ class CategoryTableViewController: UITableViewController {
             tableView.reloadData()
         } catch  {
             print(error)
-        }
-    }
-
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "CategoryToItem" {
-            let destination = segue.destination as! TableViewController
-            let indexPath = self.tableView.indexPathForSelectedRow!
-            destination.categoryName = categoryArray[indexPath.row].name
         }
     }
 }
