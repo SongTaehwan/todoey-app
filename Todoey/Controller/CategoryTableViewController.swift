@@ -9,9 +9,10 @@
 import UIKit
 import SwipeCellKit
 import RealmSwift
+import ChameleonFramework
 
 
-class CategoryTableViewController: UITableViewController {
+class CategoryTableViewController: SwipeTableViewController {
     let realm = try! Realm()
 
     var categoryArray: Results<Category>?
@@ -22,6 +23,14 @@ class CategoryTableViewController: UITableViewController {
         loadCategories()
         
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard let navBarColor = UIColor(hexString: "1D9BF6") else {fatalError()}
+        updateNavBarColor(navBarColor)
     }
 
     // MARK: - Table view data source
@@ -29,12 +38,16 @@ class CategoryTableViewController: UITableViewController {
         return categoryArray?.count ?? 1
     }
     
+    // get cell from superclass
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
-        cell.delegate = self
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
 
         if let category = categoryArray?[indexPath.row] {
             cell.textLabel?.text = category.name
+            
+            guard let colour = UIColor(hexString: category.colour) else {fatalError()}
+            cell.backgroundColor = colour
+            cell.textLabel?.textColor = ContrastColorOf(colour, returnFlat: true)
         }
 
         return cell
@@ -44,6 +57,18 @@ class CategoryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
         performSegue(withIdentifier: "goToItems", sender: self)
+    }
+    
+    // MARK: - Cell delete on swipe
+    override func updateOnSwipe(at indexPath: IndexPath) {
+        let target = self.categoryArray![indexPath.row]
+        do {
+            try self.realm.write { () in
+                self.realm.delete(target)
+            }
+        } catch {
+            print(error)
+        }
     }
 
     // MARK: - Navigation
@@ -72,6 +97,7 @@ class CategoryTableViewController: UITableViewController {
                 // Create Data
                 let newCategory = Category() // Realm Data Model
                 newCategory.setValue(name, forKey: "name")
+                newCategory.setValue(UIColor.randomFlat().hexValue(), forKey: "colour")
                 
                 self.save(category: newCategory)
             }
@@ -105,36 +131,5 @@ class CategoryTableViewController: UITableViewController {
         } catch  {
             print(error)
         }
-    }
-}
-
-// MARK: - SwipCellDelegate Methods
-extension CategoryTableViewController: SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
-            let target = self.categoryArray![indexPath.row]
-            do {
-                try self.realm.write { () in
-                    self.realm.delete(target)
-                }
-            } catch {
-                print(error)
-            }
-        }
-
-        // customize the action appearance
-        deleteAction.image = UIImage(systemName: "trash")
-
-        return [deleteAction]
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-        var options = SwipeOptions()
-        options.expansionStyle = .destructive
-        
-        return options
     }
 }

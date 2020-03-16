@@ -11,6 +11,7 @@
 		E420DF1B241B4F1000E6BB23 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E420DF1A241B4F1000E6BB23 /* CategoryTableViewController.swift */; };
 		E42AE3B1241B8261006FDBEE /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42AE3B0241B8261006FDBEE /* Todo.swift */; };
 		E42AE3B3241B826E006FDBEE /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42AE3B2241B826E006FDBEE /* Category.swift */; };
+		E48CAF78241F170D0029737B /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48CAF77241F170D0029737B /* SwipeTableViewController.swift */; };
 		EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE4F9239524DB00FB933B /* AppDelegate.swift */; };
 		EB2BE4FE239524DB00FB933B /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE4FD239524DB00FB933B /* TableViewController.swift */; };
 		EB2BE501239524DB00FB933B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE4FF239524DB00FB933B /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 		E420DF1A241B4F1000E6BB23 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		E42AE3B0241B8261006FDBEE /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		E42AE3B2241B826E006FDBEE /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		E48CAF77241F170D0029737B /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		EB2BE4F6239524DB00FB933B /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE4F9239524DB00FB933B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB2BE4FD239524DB00FB933B /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			children = (
 				E420DF1A241B4F1000E6BB23 /* CategoryTableViewController.swift */,
 				EB2BE4FD239524DB00FB933B /* TableViewController.swift */,
+				E48CAF77241F170D0029737B /* SwipeTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				E42AE3B3241B826E006FDBEE /* Category.swift in Sources */,
 				EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */,
 				E420DF1B241B4F1000E6BB23 /* CategoryTableViewController.swift in Sources */,
+				E48CAF78241F170D0029737B /* SwipeTableViewController.swift in Sources */,
 				E42AE3B1241B8261006FDBEE /* Todo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
