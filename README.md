@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./Document/Todoey-demo.gif" height="400" />
+<img src="./Document/Todoey-demo.gif" height="600" />
 </p>
 
 # Todoey ✓
